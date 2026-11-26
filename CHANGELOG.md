@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.0.4] - fork build
+
+### Fixed
+
+ios
+ - Removed the `FlutterPluginRegistrar.viewController` lookup. That member does not exist on
+   `FlutterPluginRegistrar` in the iOS engine, so 0.0.3 and 0.0.4-dev.1 failed to compile against
+   current Flutter (`Value of type 'any FlutterPluginRegistrar' has no member 'viewController'`).
+   The scene key window is now the only source for the host view controller.
+
+## [0.0.4-dev.1] - August 26, 2026
+
+### Fixed
+
+Android
+ - Fixed a fatal crash when the activity is destroyed while contacts are still loading (#3, thanks @ooglek).
+ - Reading a contact photo no longer throws on invalid identifier, revoked permission, or undecodable image; falls back to an empty avatar.
+ - Fixed crash when the device contact picker is closed without a selection.
+ - Background failures now surface as a `PlatformException` instead of crashing.
+
+ios
+ - The contact form, existing-contact view, and picker now open correctly when another modal is already on screen.
+ - `openContactForm` no longer hangs when no view controller is available.
+
+### Changed
+
+Android
+ - Replaced deprecated `AsyncTask`, removing the "uses or overrides a deprecated API" build warning (#2, thanks @tylyo).
+
+ios
+ - Removed deprecated `keyWindow` usage and dead pre‑iOS‑13 code paths.
+ - Method‑channel arguments are now validated instead of force‑cast.
+ - Debug logging is no longer compiled into release builds.
+ - Corrected podspec metadata.
+
+> **Note:** on iOS, `openContactForm` previously hung forever if no view controller could be
+> resolved; it now throws `FormOperationException(FORM_COULD_NOT_BE_OPEN)`. Wrap it in
+> `try`/`catch` as shown in the README.
+
 ## [0.0.3] - April 8, 2026
 
 ### Added
